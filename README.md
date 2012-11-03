@@ -5,6 +5,6 @@ Vagrantfile and Chef recipes for setting up a LAMP (Ubuntu Precise64) developmen
 
 Usage
 =====
-clone the repo, cd into it and run 'vagrant up'
+clone the repo, cd into it and run 'sudo true && vagrant up'
 New vhosts are created automatically by adding folders to 'vhosts' with the folder name matching the DNS name. 
 Document root is 'www' inside each vhost. Add vhosts names to your hosts file, or setup dnsmasq with a wildcard, e.g. *.vm
