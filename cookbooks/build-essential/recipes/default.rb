@@ -43,8 +43,3 @@ end
 package "bison" do
   action :install
 end
-
-#make wasn't getting installed?!
-# package "make" do
-#   action :install
-# end
