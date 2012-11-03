@@ -1,0 +1,7 @@
+#!/bin/tcsh
+
+# Oracle Instant Client
+setenv LD_LIBRARY_PATH "$LD_LIBRARY_PATH:<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+setenv TNS_ADMIN "<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+setenv ORACLE_BASE "<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+setenv ORACLE_HOME $ORACLE_BASE

@@ -1,0 +1,12 @@
+<VirtualHost *:80>
+# get the server name from the Host: header
+UseCanonicalName Off
+
+# this log format can be split per-virtual-host based on the first field
+#LogFormat "%V %h %l %u %t \"%r\" %s %b" vcommon
+#CustomLog /vagrant/vhosts/%0/logs/access_log vcommon
+
+# include the server name in the filenames used to satisfy requests
+VirtualDocumentRoot /vagrant/vhosts/%0/www
+#VirtualScriptAlias /vagrant/vhosts/%0/cgi-bin
+</VirtualHost>

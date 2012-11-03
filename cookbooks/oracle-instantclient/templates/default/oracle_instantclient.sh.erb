@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Oracle Instant Client
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+TNS_ADMIN="<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+ORACLE_BASE="<%= "#{node[:oracle_instantclient][:install_dir]}/#{node[:oracle_instantclient][:client_dir_name]}"%>"
+ORACLE_HOME=$ORACLE_BASE
+
+export LD_LIBRARY_PATH
+export TNS_ADMIN
+export ORACLE_BASE
+export ORACLE_HOME
