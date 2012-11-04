@@ -45,6 +45,7 @@ class Chef
               create_sql += " TEMPLATE = #{new_resource.template}" if new_resource.template
               create_sql += " ENCODING = #{encoding}" if new_resource.encoding
               create_sql += " TABLESPACE = #{new_resource.tablespace}" if new_resource.tablespace
+              create_sql += " LC_CTYPE = '#{new_resource.collation}' LC_COLLATE = '#{new_resource.collation}'" if new_resource.collation
               create_sql += " CONNECTION LIMIT = #{new_resource.connection_limit}" if new_resource.connection_limit
               create_sql += " OWNER = #{new_resource.owner}" if new_resource.owner
               Chef::Log.debug("#{@new_resource}: Performing query [#{create_sql}]")
@@ -71,9 +72,9 @@ class Chef
         def action_query
           if exists?
             begin
-              Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql}]")
-              db(@new_resource.database_name).query(@new_resource.sql)
-              Chef::Log.debug("#{@new_resource}: query [#{new_resource.sql}] succeeded")
+              Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql_query}]")
+              db(@new_resource.database_name).query(@new_resource.sql_query)
+              Chef::Log.debug("#{@new_resource}: query [#{new_resource.sql_query}] succeeded")
               @new_resource.updated_by_last_action(true)
             ensure
               close

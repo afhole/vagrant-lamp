@@ -61,7 +61,7 @@ when "windows"
   default['mysql']['url']                     = "http://www.mysql.com/get/Downloads/MySQL-5.5/#{mysql['package_file']}/from/http://mysql.mirrors.pair.com/"
 
   default['mysql']['service_name']            = "mysql"
-  default['mysql']['basedir']                 = "#{ENV['SYSTEMDRIVE']}\\Program Files (x86)\\MySQL\\#{mysql['packages'].first}"
+  default['mysql']['basedir']                 = "#{ENV['SYSTEMDRIVE']}\\Program Files (x86)\\MySQL\\#{mysql['server']['packages'].first}"
   default['mysql']['data_dir']                = "#{mysql['basedir']}\\Data"
   default['mysql']['bin_dir']                 = "#{mysql['basedir']}\\bin"
   default['mysql']['mysqladmin_bin']          = "#{mysql['bin_dir']}\\mysqladmin"
@@ -102,7 +102,7 @@ end
 
 default['mysql']['reload_action'] = "restart" # or "reload" or "none"
 
-default['mysql']['use_upstart'] = platform?("ubuntu") && node.platform_version.to_f >= 10.04
+default['mysql']['use_upstart'] = node.platform?("ubuntu") && node.platform_version.to_f >= 10.04
 
 default['mysql']['auto-increment-increment']        = 1
 default['mysql']['auto-increment-offset']           = 1
@@ -137,7 +137,6 @@ default['mysql']['tunable']['log_bin_trust_function_creators'] = false
 
 default['mysql']['tunable']['innodb_buffer_pool_size']         = "128M"
 default['mysql']['tunable']['innodb_log_file_size']            = "5M"
-default['mysql']['tunable']['innodb_buffer_pool_size']         = "128M"
 default['mysql']['tunable']['innodb_additional_mem_pool_size'] = "8M"
 default['mysql']['tunable']['innodb_data_file_path']           = "ibdata1:10M:autoextend"
 default['mysql']['tunable']['innodb_flush_log_at_trx_commit']  = "1"

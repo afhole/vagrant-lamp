@@ -36,7 +36,11 @@ class Chef
           unless exists?
             begin
               Chef::Log.debug("#{@new_resource}: Creating database #{new_resource.database_name}")
-              db.query("create database #{new_resource.database_name}")
+              create_sql = "CREATE DATABASE #{new_resource.database_name}"
+              create_sql += " CHARACTER SET = #{new_resource.encoding}" if new_resource.encoding
+              create_sql += " COLLATE = #{new_resource.collation}" if new_resource.collation
+              Chef::Log.debug("#{@new_resource}: Performing query [#{create_sql}]")
+              db.query(create_sql)
               @new_resource.updated_by_last_action(true)
             ensure
               close
@@ -60,8 +64,8 @@ class Chef
           if exists?
             begin
               db.select_db(@new_resource.database_name) if @new_resource.database_name
-              Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql}]")
-              db.query(@new_resource.sql)
+              Chef::Log.debug("#{@new_resource}: Performing query [#{new_resource.sql_query}]")
+              db.query(@new_resource.sql_query)
               @new_resource.updated_by_last_action(true)
             ensure
               close
@@ -76,13 +80,15 @@ class Chef
 
         def db
           @db ||= begin
-            ::Mysql.new(
+            connection = ::Mysql.new(
               @new_resource.connection[:host],
               @new_resource.connection[:username],
               @new_resource.connection[:password],
               nil,
               @new_resource.connection[:port] || 3306
             )
+            connection.set_server_option ::Mysql::OPTION_MULTI_STATEMENTS_ON
+            connection
           end
         end
 

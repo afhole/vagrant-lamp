@@ -21,10 +21,25 @@
 
 include_recipe "mysql::client"
 
-# generate all passwords
-node.set_unless['mysql']['server_debian_password'] = secure_password
-node.set_unless['mysql']['server_root_password']   = secure_password
-node.set_unless['mysql']['server_repl_password']   = secure_password
+if Chef::Config[:solo]
+  missing_attrs = %w{
+    server_debian_password server_root_password server_repl_password
+  }.select do |attr|
+    node["mysql"][attr].nil?
+  end.map { |attr| "node['mysql']['#{attr}']" }
+
+  if !missing_attrs.empty?
+    Chef::Application.fatal!([
+      "You must set #{missing_attrs.join(', ')} in chef-solo mode.",
+      "For more information, see https://github.com/opscode-cookbooks/mysql#chef-solo-note"
+    ].join(' '))
+  end
+else
+  # generate all passwords
+  node.set_unless['mysql']['server_debian_password'] = secure_password
+  node.set_unless['mysql']['server_root_password']   = secure_password
+  node.set_unless['mysql']['server_repl_password']   = secure_password
+end
 
 if platform?(%w{debian ubuntu})
 
@@ -110,7 +125,7 @@ unless platform?(%w{mac_os_x})
       start_command "start mysql"
     end
     supports :status => true, :restart => true, :reload => true
-    action :nothing
+    action :enable
   end
 
   skip_federated = case node['platform']
@@ -148,16 +163,12 @@ unless Chef::Config[:solo]
   end
 end
 
-# set the root password on platforms
-# that don't support pre-seeding
-unless platform?(%w{debian ubuntu})
-
-  execute "assign-root-password" do
-    command "\"#{node['mysql']['mysqladmin_bin']}\" -u root password \"#{node['mysql']['server_root_password']}\""
-    action :run
-    only_if "\"#{node['mysql']['mysql_bin']}\" -u root -e 'show databases;'"
-  end
-
+# set the root password for situations that don't support pre-seeding.
+# (eg. platforms other than debian/ubuntu & drop-in mysql replacements)
+execute "assign-root-password" do
+  command "\"#{node['mysql']['mysqladmin_bin']}\" -u root password \"#{node['mysql']['server_root_password']}\""
+  action :run
+  only_if "\"#{node['mysql']['mysql_bin']}\" -u root -e 'show databases;'"
 end
 
 # Homebrew has its own way to do databases
@@ -197,5 +208,9 @@ else
       action :nothing
       subscribes :run, resources("template[#{grants_path}]"), :immediately
     end
+  end
+
+  service "mysql" do
+    action :start
   end
 end

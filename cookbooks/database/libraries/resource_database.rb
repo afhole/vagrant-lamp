@@ -46,29 +46,37 @@ class Chef
         )
       end
 
-      def sql(arg=nil)
+      def sql(arg=nil, &block)
+        arg ||= block
         set_or_return(
           :sql,
           arg,
-          :kind_of => String
+          :kind_of => [String, Proc]
         )
       end
 
-      def sql(arg=nil)
-        set_or_return(
-          :sql,
-          arg,
-          :kind_of => String
-        )
+      def sql_query
+        if sql.kind_of?(Proc)
+          sql.call
+        else
+          sql
+        end
       end
 
-      # 
       def template(arg=nil)
         set_or_return(
           :template,
           arg,
           :kind_of => String,
           :default => 'DEFAULT'
+        )
+      end
+
+      def collation(arg=nil)
+        set_or_return(
+          :collation,
+          arg,
+          :kind_of => String
         )
       end
 

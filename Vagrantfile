@@ -16,7 +16,16 @@ Vagrant::Config.run do |config|
     chef.json = 
     {
       :mysql => 
-        { :server_root_password => mysql_root_password, :bind_address => guest_ip }
+        {
+          :server_root_password => mysql_root_password,
+          :server_repl_password => mysql_root_password,
+          :server_debian_password => mysql_root_password, 
+          :bind_address => guest_ip
+        },
+        :build_essential =>
+        {
+          :compiletime => true
+        }
     }
   end
   

@@ -72,7 +72,7 @@ template "/etc/profile.d/oracle_instantclient.sh" do
 end
 
 execute "unpack_instant_client" do
-  command "/usr/bin/unzip #{node[:oracle_instantclient][:install_dir]}/dist/#{basic_file_name} -d #{node[:oracle_instantclient][:install_dir]}"
+  command "/usr/bin/unzip -o #{node[:oracle_instantclient][:install_dir]}/dist/#{basic_file_name} -d #{node[:oracle_instantclient][:install_dir]}"
   action :nothing
   notifies :run, "script[add_soname_symlink]", :immediately
 end
