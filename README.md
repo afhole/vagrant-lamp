@@ -5,7 +5,10 @@ Vagrantfile and Chef recipes for setting up a LAMP (Ubuntu Precise64) developmen
 
 Usage
 =====
-Clone the repo, check Vagrantfile defaults (Guest VM IP address, MySQL root password)
+1. Clone
+2. Check Vagrantfile defaults (Guest VM IP address, MySQL root password)
+3. Run `vagrant up` inside project folder
+
 ```
 git clone https://github.com/afhole/vagrant-lamp.git
 cd vagrant-lamp
