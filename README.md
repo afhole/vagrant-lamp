@@ -21,9 +21,9 @@ Usage
 3. Run `vagrant up` inside project folder
 
 ```
-git clone https://github.com/afhole/vagrant-lamp.git
-cd vagrant-lamp
-sudo true && vagrant up
+$ git clone https://github.com/afhole/vagrant-lamp.git
+$ cd vagrant-lamp
+$ sudo true && vagrant up
 ```
 New vhosts are created automatically by adding folders to 'vhosts' with the folder name matching the DNS name. 
 Document root is 'www' inside each vhost. Add vhosts names to your hosts file, or setup dnsmasq with a wildcard, e.g. *.vm
