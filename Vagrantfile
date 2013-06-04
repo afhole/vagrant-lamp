@@ -1,13 +1,16 @@
-Vagrant::Config.run do |config|
+Vagrant.configure("2") do |config|
 
   guest_ip              = "192.168.0.10"
   mysql_root_password   = "password"
 
   config.vm.box         = "precise64"
   config.vm.box_url     = "https://files.vagrantup.com/precise64.box"
-  config.vm.share_folder  "v-root", "/vagrant", ".", :nfs => true
-  config.vm.network       :hostonly, guest_ip
-  config.vm.customize    ["modifyvm", :id, "--memory", 768]
+  config.vm.synced_folder  ".", "/vagrant", :nfs => true
+  config.vm.network       :private_network, ip: guest_ip
+
+  config.vm.provider :virtualbox do |vb|
+      vb.customize ["modifyvm", :id, "--memory", 1024]
+    end
   
   config.vm.provision :chef_solo do |chef|
 
