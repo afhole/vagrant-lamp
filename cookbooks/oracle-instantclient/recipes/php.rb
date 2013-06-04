@@ -45,5 +45,6 @@ end
 
 execute "build_php_oci8_mod" do
   command "/usr/bin/expect /var/tmp/install_pecl_oci8.exp"
-  not_if "test -f /usr/lib/php5/20090626/oci8.so"
+#  not_if "test -f /usr/lib/php5/20090626/oci8.so"
+  not_if "test -f /usr/lib/php5/20100525/oci8.so"
 end
